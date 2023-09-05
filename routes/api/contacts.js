@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Joi = require("joi");
-const contacts = require("../../models");
-const { HttpsError } = require("../../error_handler");
+const contacts = require("../../models/contacts");
+const { HttpsError } = require("../../error_handler/errrorExport");
 
 const addSchema = Joi.object({
   name: Joi.string().required(),
@@ -76,5 +76,5 @@ router.delete("/:id", async (req, res, next) => {
     next(error);
   }
 });
-
+console.log("I am running!");
 module.exports = router;
