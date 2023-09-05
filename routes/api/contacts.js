@@ -45,22 +45,22 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-// router.put("/:id", async (req, res, next) => {
-//   try {
-//     const { error } = addSchema.validate(req.body);
-//     if (error) {
-//       throw new HttpsError(400, error.message);
-//     }
-//     const { id } = req.params;
-//     const result = await contacts.updateById(id, req.body);
-//     if (!result) {
-//       throw new HttpsError(404, "Not found");
-//     }
-//     res.json(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+router.put("/:id", async (req, res, next) => {
+  try {
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw new HttpsError(400, error.message);
+    }
+    const { id } = req.params;
+    const result = await contacts.updateContact(id, req.body);
+    if (!result) {
+      throw new HttpsError(404, "Not found");
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.delete("/:id", async (req, res, next) => {
   try {
