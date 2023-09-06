@@ -27,26 +27,23 @@ const getContactById  = async(contactId) => {
     return result;
   }
   
-  const addContact = async(name, email, phone) => {
+  const addContact = async (data) => {
     const allContacts = await listContacts();
     const newContact = {
         id: nanoid(),
-        name: name,
-        email: email,
-        phone: phone,
-    }
+        ...data
+    };
     allContacts.push(newContact);
     await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
     return newContact;
-
-  }
-  const updateContact = async(id, name, email, phone) => {
+};
+  const updateContact = async(id, data) => {
     const contacts = await listContacts();
     const index = contacts.findIndex(contact => contact.id === id);
     if(index === -1){
         return null;
     }
-    contacts[index] = {id, name, email, phone};
+    contacts[index] = {id, ...data};
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
     return contacts[index];
 }

@@ -6,7 +6,7 @@ const { HttpsError } = require("../../error_handler/errrorExport");
 
 const addSchema = Joi.object({
   name: Joi.string().required(),
-  phone: Joi.number().required(),
+  phone: Joi.string().required(),
   email: Joi.string().required(),
 });
 
