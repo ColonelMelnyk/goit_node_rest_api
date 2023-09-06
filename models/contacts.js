@@ -37,15 +37,16 @@ const getContactById  = async(contactId) => {
     await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
     return newContact;
 };
-  const updateContact = async(id, data) => {
-    const contacts = await listContacts();
-    const index = contacts.findIndex(contact => contact.id === id);
-    if(index === -1){
-        return null;
-    }
-    contacts[index] = {id, ...data};
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return contacts[index];
+const updateContact = async(id, data) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex(contact => contact.id === id);
+  if(index === -1){
+      return null;
+  }
+  const updatedContact = { ...contacts[index], ...data };
+  contacts[index] = { ...updatedContact, id };
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return contacts[index];
 }
 
 

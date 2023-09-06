@@ -9,6 +9,12 @@ const addSchema = Joi.object({
   phone: Joi.string().required(),
   email: Joi.string().required(),
 });
+const changeSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
+}).or('name', 'email', 'phone');
+
 
 router.get("/", async (req, res, next) => {
   try {
@@ -47,7 +53,7 @@ router.post("/", async (req, res, next) => {
 
 router.put("/:id", async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body);
+    const { error } = changeSchema.validate(req.body);
     if (error) {
       throw new HttpsError(400, error.message);
     }
