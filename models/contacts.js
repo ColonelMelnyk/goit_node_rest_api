@@ -27,11 +27,13 @@ const addSchema = Joi.object({
   email: Joi.string().required(),
   favorite: Joi.boolean().default(false),
 });
+
 const changeSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
   phone: Joi.string(),
 }).or('name', 'email', 'phone', 'favorite');
+
 const schemaUpdateFavorite = Joi.object({
   favorite: Joi.boolean().required(),
 });
