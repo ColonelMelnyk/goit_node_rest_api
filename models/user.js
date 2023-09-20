@@ -1,7 +1,7 @@
 const {Schema, model} = require("mongoose");
 const Joi = require("joi");
 
-const {handleMongooseError} = require("../error_handler");
+const {handleMongooseError} = require("../middlewares");
 
 const emailFormat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -20,11 +20,10 @@ const userSchema = new Schema({
         enum: ["starter", "pro", "business"],
         default: "starter"
       },
-      owner: {
-        type: Schema.Types.ObjectId,
-        ref: 'user',
-      },
-      token: String
+      token: {
+        type: String,
+        default: ""
+    }
 }, {versionKey: false, timestamps: true});
 
 userSchema.post("save", handleMongooseError);
