@@ -19,6 +19,7 @@ const authenticate = async (req, res, next) => {
             next(HttpsError(401)); 
         }
         req.user = user;
+        // console.log("Entire user data", req.user);
         next();
     }
     catch {
