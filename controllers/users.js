@@ -1,12 +1,14 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const gravatar = require("gravatar");
+const path = require ("path");
+const fs = require("fs");
 const {User} = require("../models/user");
 
 const { HttpsError, ctrlWrapper } = require("../error_handler");
 
 const {SECRET_KEY} = process.env;
-
+const avatarDir = path.join(__dirname, '../', 'public', 'avatars');
 const register = async(req, res)=> {
     const {email, password} = req.body;
     const user = await User.findOne({email});
@@ -16,10 +18,11 @@ const register = async(req, res)=> {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-
-    const newUser = await User.create({...req.body, password: hashPassword});
+    const avatarURL = gravatar.url(email);
+    const newUser = await User.create({...req.body, password: hashPassword, avatarURL});
 
     res.status(201).json({
+        name: newUser.name,
         email: newUser.email,
         subscription: newUser.subscription,
     })
@@ -70,6 +73,24 @@ const subscription = async(req, res)=>{
         message: "Subscription updated"
     });
 };
+const updateAvatar = async (req, res) => {
+    const { _id } = req.user;
+    const { path: tempUpload, originalname } = req.file;
+    const filename = `${_id}_${originalname}`;
+    const resultUpload = path.join(avatarDir, filename);
+    try {
+        fs.renameSync(tempUpload, resultUpload);
+        const avatarURL = path.join('avatars', filename);
+        await User.findByIdAndUpdate(_id, { avatarURL });
+        res.json({
+            avatarURL,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
 
 
 module.exports = {
@@ -78,4 +99,5 @@ module.exports = {
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
     subscription: ctrlWrapper(subscription),
+    updateAvatar: ctrlWrapper(updateAvatar),
 }

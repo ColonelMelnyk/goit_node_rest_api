@@ -4,6 +4,10 @@ const {handleMongooseError} = require("../error_handler");
 
 const emailFormat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 const userSchema = new Schema({
+    name:{
+      type: String,
+      required: [true, 'Set name for user']
+      },
     password: {
         type: String,
         required: [true, 'Set password for user'],
@@ -22,6 +26,10 @@ const userSchema = new Schema({
       token: {
         type: String,
         default: ""
+    },
+      avatarURL:{
+        type: String,
+        required: true 
     }
 }, {versionKey: false, timestamps: true});
 
