@@ -8,7 +8,7 @@ const {User} = require("../models/user");
 const { HttpsError, ctrlWrapper } = require("../error_handler");
 
 const {SECRET_KEY} = process.env;
-const avatarsDir = path.join(__dirname, "../", "public", "avatars");
+const avatarDir = path.join(__dirname, '../', 'public', 'avatars');
 const register = async(req, res)=> {
     const {email, password} = req.body;
     const user = await User.findOne({email});
@@ -22,6 +22,7 @@ const register = async(req, res)=> {
     const newUser = await User.create({...req.body, password: hashPassword, avatarURL});
 
     res.status(201).json({
+        name: newUser.name,
         email: newUser.email,
         subscription: newUser.subscription,
     })
@@ -72,19 +73,20 @@ const subscription = async(req, res)=>{
         message: "Subscription updated"
     });
 };
-const updateAvatar = async(req, res)=> {
-    const {_id} = req.user;
-    const {path: tempUpload, originalname} = req.file;
+const updateAvatar = async (req, res) => {
+    const { _id } = req.user;
+    const { path: tempUpload, originalname } = req.file;
     const filename = `${_id}_${originalname}`;
-    const resultUpload = path.join(avatarsDir, filename);
+    const resultUpload = path.join(avatarDir, filename);
     await fs.rename(tempUpload, resultUpload);
-    const avatarURL = path.join("avatars", filename);
-    await User.findByIdAndUpdate(_id, {avatarURL});
+    const avatarURL = path.join('avatars', filename);
+    await User.findByIdAndUpdate(_id, { avatarURL });
 
     res.json({
         avatarURL,
-    })
-}
+    });
+};
+
 
 
 module.exports = {
