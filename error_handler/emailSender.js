@@ -16,9 +16,7 @@ const transport = nodemailer.createTransport(nodemailerConfig);
 
 const emailSender = data => {
     const email = { 
-        to: "pisiros991@klanze.com",
-        subject: "Test email",
-        html: "<p><strong>Test email</strong> from localhost:3000</p>", 
+        ...data, 
         from: "mr.melnyk2024@meta.ua" };
     return transport.sendMail(email);
 };
